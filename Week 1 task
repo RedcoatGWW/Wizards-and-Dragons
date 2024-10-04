@@ -1,0 +1,86 @@
+import os
+import time
+import keyboard
+import IPython.display
+
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def welcome_message():
+    print("Welcome to the Warrior's and Dragon's Adventure!")
+    print("Prepare yourself for a journey though danger and mystery as you face the unknown for power and glory!.")
+    print("Press any key to start the game.")
+    
+    keyboard.read_event()  
+    clear_screen()
+
+def choose_character():
+    character_health = 100
+    character_type = ""
+    
+    while character_type not in ['warrior', 'scout']: #This loop will keep running until the user chooses a valid character type
+        print("Choose your character type:")
+        print("1. Warrior")
+        print("2. Scout")
+        character_type = input("Enter '1' for Warrior or '2' for Scout: ").strip()
+        
+        if character_type == '1':
+            print("Welcome Warrior! You are Strong but slow. You have 150 health points.")
+            character_type = "warrior"
+            character_health += 50 #This adds 50 health for choosing the warrior class
+        elif character_type == '2':
+            print("You have chosen the Scout class. You are very agile and you have 100 health points.")
+            character_type = "scout"
+        else:
+            print("Invalid choice. Please choose either '1' for Warrior or '2' for Scout.")
+            time.sleep(2)
+            clear_screen()
+
+    time.sleep(4)
+    clear_screen()
+
+    return character_type, character_health
+
+def riddle_challenge(character_type, character_health):
+    while character_health > 0:
+        print("You begin making your way through the forest, when you come across a mysterious rock, covered in druidic runes blocking your path. \nAs you place your hand on the rock, a celestial voice booms out echoing through your very form.")
+        print("\nAnswer my riddle mortals or feel the wrath of my power!\n What can you catch but cannot throw?\n")
+        
+        answer = input("What is your answer?: ").strip().lower()
+
+        if answer == "a cold" or answer == "cold":
+            print("Correct! You may pass safely.")
+            break
+        elif answer == "a bus" or answer == "a train":
+            print("Interesting choice, but such machines don't exist in this world. You may pass, but be careful.")
+            break
+        else:
+            print("The celestial voice roars. 'Incorrect! You shall feel my wrath!' ")
+            if character_type == "warrior":
+                character_health -= 20
+                print("A spectral stone spear lunges through the stone towards you. You manage to block some of the blow but lose 20 health points. Your health is now:", character_health)
+            elif character_type == "scout":
+                character_health -= 10
+                print("A vine lashes out behind you, you nimbly dash to the side as it grazes your side. You lose 10 health points. Your health is now:", character_health)
+
+        if character_health <= 0:
+            print("\nYou have been defeated. Game over.")
+            break
+
+        time.sleep(4)
+        clear_screen()
+    
+    return character_health
+
+
+
+
+#main game function
+def play_game():
+    welcome_message()
+    character_type, character_health = choose_character()
+    character_health = riddle_challenge(character_type, character_health)
+
+if __name__ == "__main__":
+    play_game()
